@@ -30,12 +30,22 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
             background: radial-gradient(ellipse at center, #1a1a1a 0%, #0a0a0a 100%);
             display: block;
+            max-width: 100%;
+            height: auto;
         }
 
         h1 {
             color: #E91E63;
             margin-top: 15px;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* For small phones */
+        @media (max-width: 480px) {
+            canvas {
+                max-width: 100%;
+                height: auto;
+            }
         }
     </style>
 </head>
@@ -283,16 +293,15 @@
             });
         }
 
-
-
         function draw(progress) {
             // Clear canvas
             ctx.fillStyle = 'rgba(15, 15, 35, 0.1)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Draw text at top of canvas
+            // Draw text at top of canvas - adjust font size based on canvas width
+            const fontSize = canvas.width > 500 ? 36 : 24;
             ctx.fillStyle = '#FFD966';
-            ctx.font = 'bold 36px Arial';
+            ctx.font = 'bold ' + fontSize + 'px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'top';
             ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
