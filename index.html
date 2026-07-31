@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy National Girlfriend Day Ala</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffd6e8 0%, #ffb3d9 50%, #ffc0d9 100%);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        .heart-bg {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0.12;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+        }
+ 
+        .heart-emoji {
+            font-size: 70px;
+            line-height: 1;
+        }
+ 
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .envelope-container {
+            position: relative;
+            width: 280px;
+            height: 220px;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        /* Back triangular flap */
+        .envelope-back-flap {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 140px solid transparent;
+            border-right: 140px solid transparent;
+            border-top: 60px solid #f08080;
+            top: 60px;
+            z-index: 1;
+        }
+
+        /* Front flap border highlight */
+        .envelope-front-flap-border {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 140px solid transparent;
+            border-right: 140px solid transparent;
+            border-top: 60px solid #d4898b;
+            top: 60px;
+            z-index: 2;
+        }
+
+        /* Front triangular flap (creates envelope point) */
+        .envelope-front-flap {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 140px solid transparent;
+            border-right: 140px solid transparent;
+            border-top: 60px solid rgba(245, 169, 169, 0.95);
+            top: 60px;
+            z-index: 3;
+            transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform-origin: 50% 0;
+        }
+
+        .envelope-container.open .envelope-front-flap {
+            transform: rotateX(-170deg);
+        }
+
+        /* Main envelope body */
+        .envelope-body {
+            position: absolute;
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, #f5a9a9 0%, #f08080 100%);
+            border: 3px solid #d4898b;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            z-index: 1;
+            top: 60px;
+        }
+
+        .letter {
+            position: absolute;
+            width: 85%;
+            height: 85%;
+            background: #f5f5f5;
+            border: 2px solid #333;
+            border-radius: 6px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 10px;
+            opacity: 0;
+            transform: scale(0.05);
+            transition: opacity 1s ease-out 0.8s, transform 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s;
+            z-index: 10;
+            top: 50%;
+            left: 50%;
+            margin-top: -42.5%;
+            margin-left: -42.5%;
+        }
+
+        .envelope-container.open .letter {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 40px;
+            color: #a85a7a;
+            font-size: 12px;
+            font-style: italic;
+            animation: pulse 2s infinite;
+        }
+
+        .greeting {
+            position: absolute;
+            top: 40px;
+            color: #a85a7a;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
+        }
+
+        .subgreeting {
+            position: absolute;
+            top: 120px;
+            color: #a85a7a;
+            font-size: 22px;
+            text-align: center;
+            width: 100%;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Floating heart decorations -->
+    <div class="heart-bg" style="top: 5%; left: 8%; animation-delay: 0s;">
+        <div class="heart-emoji">❤️</div>
+    </div>
+    <div class="heart-bg" style="top: 15%; right: 12%; animation-delay: 0.5s;">
+        <div class="heart-emoji">❤️</div>
+    </div>
+    <div class="heart-bg" style="top: 25%; left: 20%; animation-delay: 1s;">
+        <div class="heart-emoji">❤️</div>
+    </div>
+    <div class="heart-bg" style="top: 35%; right: 8%; animation-delay: 1.5s;">
+        <div class="heart-emoji">❤️</div>
+    </div>
+    <div class="heart-bg" style="bottom: 30%; left: 10%; animation-delay: 2s;">
+        <div class="heart-emoji">❤️</div>
+    </div>
+    <div class="heart-bg" style="bottom: 20%; right: 15%; animation-delay: 2.5s;">
+        <div class="heart-emoji">❤️</div>
+    </div>
+    <div class="heart-bg" style="bottom: 10%; left: 25%; animation-delay: 3s;">
+        <div class="heart-emoji">❤️</div>
+    </div>
+    <div class="heart-bg" style="bottom: 15%; right: 5%; animation-delay: 3.5s;">
+        <div class="heart-emoji">❤️</div>
+    </div>
+
+    <div class="container">
+        <div class="greeting">Happy National Girlfriend Day ❤️</div>
+        <div class="subgreeting">I Love You So Much ☺️</div>
+        <div class="envelope-container" id="envelopeContainer">
+            <!-- Back triangular flap -->
+            <div class="envelope-back-flap"></div>
+
+            <!-- Front triangular flap (the one that opens) -->
+            <div class="envelope-front-flap-border"></div>
+            <div class="envelope-front-flap"></div>
+
+            <!-- Main envelope body -->
+            <div class="envelope-body"></div>
+
+            <!-- Letter that appears inside -->
+            <div class="letter">
+                <div style="font-size: 80px;">❤️</div>
+            </div>
+        </div>
+
+        <div class="hint">Click the envelope to open it 💌</div>
+    </div>
+
+    <script>
+        const envelopeContainer = document.getElementById('envelopeContainer');
+        let isOpen = false;
+
+        envelopeContainer.addEventListener('click', function() {
+            if (!isOpen) {
+                envelopeContainer.classList.add('open');
+                isOpen = true;
+                
+                // Navigate to the letter page after animation
+                setTimeout(() => {
+                    window.location.href = 'letter.html';
+                }, 1800);
+            }
+        });
+    </script>
+</body>
+</html>

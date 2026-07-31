@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tulips for Ala</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #16213e 100%);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        canvas {
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, #0a0a0a 100%);
+            display: block;
+        }
+
+        h1 {
+            color: #E91E63;
+            margin-top: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="tulipCanvas" width="600" height="900"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('tulipCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const animationDuration = 6000;
+        let startTime = null;
+        let isAnimating = false;
+
+        // Multiple tulips with individual stems - larger like reference image
+        const tulips = [
+            { centerX: canvas.width / 2 - 130, baseY: canvas.height - 60, stemHeight: 360, offset: -130 },
+            { centerX: canvas.width / 2, baseY: canvas.height - 80, stemHeight: 370, offset: 0 },
+            { centerX: canvas.width / 2 + 130, baseY: canvas.height - 60, stemHeight: 360, offset: 130 },
+        ];
+        const mainTulip = tulips[1]; // Center tulip for reference
+
+        class Petal {
+            constructor(x, y, width, height, rotation, colorStop, delay) {
+                this.x = x;
+                this.y = y;
+                this.width = width;
+                this.height = height;
+                this.rotation = rotation;
+                this.colorStop = colorStop;
+                this.delay = delay;
+            }
+
+            draw(ctx, progress) {
+                const petalProgress = Math.max(0, progress - this.delay);
+                if (petalProgress <= 0) return;
+
+                const scale = Math.min(petalProgress / (1 - this.delay), 1);
+
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+
+                // Create petal gradient
+                const gradient = ctx.createRadialGradient(0, -this.height * 0.3, 0, 0, 0, this.width);
+                
+                if (this.colorStop === 0) {
+                    // Outer back petal - light golden yellow
+                    gradient.addColorStop(0, '#FFE699');
+                    gradient.addColorStop(0.35, '#FFD966');
+                    gradient.addColorStop(0.65, '#F5C842');
+                    gradient.addColorStop(1, '#E8B81F');
+                } else if (this.colorStop === 1) {
+                    // Front center petal - bright golden yellow
+                    gradient.addColorStop(0, '#FFD966');
+                    gradient.addColorStop(0.35, '#F5C842');
+                    gradient.addColorStop(0.65, '#E8B81F');
+                    gradient.addColorStop(1, '#D4A217');
+                } else {
+                    // Inner petals - deeper golden/amber yellow
+                    gradient.addColorStop(0, '#F5C842');
+                    gradient.addColorStop(0.35, '#E8B81F');
+                    gradient.addColorStop(0.65, '#D4A217');
+                    gradient.addColorStop(1, '#B8860B');
+                }
+
+                ctx.fillStyle = gradient;
+                ctx.globalAlpha = 0.9;
+
+                // Draw petal using bezier curves - TEARDROP/EGG SHAPE with pointed base and POINTED TOP
+                ctx.beginPath();
+                ctx.moveTo(0, 0); // Point at base where petal attaches
+                
+                // Left side of teardrop - curves outward then narrows to point
+                ctx.bezierCurveTo(
+                    -this.width * 0.45 * scale,
+                    -this.height * 0.15 * scale,
+                    -this.width * 0.6 * scale,
+                    -this.height * 0.4 * scale,
+                    -this.width * 0.3 * scale,
+                    -this.height * 0.95 * scale
+                );
+
+                // Top of teardrop - rounded point
+                ctx.bezierCurveTo(
+                    -this.width * 0.1 * scale,
+                    -this.height * 1.08 * scale,
+                    this.width * 0.1 * scale,
+                    -this.height * 1.08 * scale,
+                    this.width * 0.3 * scale,
+                    -this.height * 0.95 * scale
+                );
+
+                // Right side of teardrop - curves outward then narrows to point
+                ctx.bezierCurveTo(
+                    this.width * 0.6 * scale,
+                    -this.height * 0.4 * scale,
+                    this.width * 0.45 * scale,
+                    -this.height * 0.15 * scale,
+                    0,
+                    0
+                );
+
+                ctx.fill();
+
+                // Add petal vein detail
+                ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+                ctx.lineWidth = 1.5;
+                ctx.globalAlpha = 0.3;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.quadraticCurveTo(0, -this.height * 0.3 * scale, 0, -this.height * scale);
+                ctx.stroke();
+
+                // Add inner highlight for depth
+                ctx.globalAlpha = 0.2;
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(-this.width * 0.15 * scale, -this.height * 0.2 * scale);
+                ctx.quadraticCurveTo(-this.width * 0.2 * scale, -this.height * 0.6 * scale, -this.width * 0.15 * scale, -this.height * 0.9 * scale);
+                ctx.stroke();
+
+                ctx.restore();
+            }
+        }
+
+        // Create petals for each tulip - 5 PETALS for fuller tulip look
+        function createPetalsForTulip(tulip) {
+            const flowerCenterX = tulip.centerX;
+            const flowerCenterY = tulip.baseY - tulip.stemHeight + 20;
+            
+            return [
+                // Back-left outer petal - LARGE (closer together)
+                new Petal(flowerCenterX, flowerCenterY, 42, 100, -28, 0, 0.05),
+                // Back-right outer petal - LARGE (closer together)
+                new Petal(flowerCenterX, flowerCenterY, 42, 100, 28, 0, 0.12),
+                // Front center petal - LARGEST
+                new Petal(flowerCenterX, flowerCenterY, 46, 104, 0, 1, 0.2),
+                // Middle-left petal - MEDIUM
+                new Petal(flowerCenterX, flowerCenterY, 38, 90, -14, 2, 0.27),
+                // Inner petal - MEDIUM
+                new Petal(flowerCenterX, flowerCenterY, 36, 88, 14, 2, 0.34),
+            ];
+        }
+
+        const allPetals = tulips.flatMap(createPetalsForTulip);
+
+        function drawIndividualStems(progress) {
+            const stemProgress = Math.min(Math.max(0, progress - 0.05) / 0.3, 1);
+            if (stemProgress <= 0) return;
+
+            const stemGradient = ctx.createLinearGradient(0, 0, 10, 0);
+            stemGradient.addColorStop(0, '#558B2F');
+            stemGradient.addColorStop(0.5, '#7CB342');
+            stemGradient.addColorStop(1, '#9BC34A');
+
+            tulips.forEach(tulip => {
+                const stemEndY = tulip.baseY - (tulip.stemHeight * stemProgress);
+
+                // Individual stem with gradient
+                ctx.strokeStyle = stemGradient;
+                ctx.lineWidth = 4.5;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.beginPath();
+                ctx.moveTo(tulip.centerX, tulip.baseY);
+                ctx.quadraticCurveTo(tulip.centerX + 1.5, tulip.baseY - tulip.stemHeight * stemProgress * 0.5, tulip.centerX, stemEndY);
+                ctx.stroke();
+
+                // Stem highlight
+                ctx.strokeStyle = 'rgba(212, 245, 66, 0.5)';
+                ctx.lineWidth = 1.5;
+                ctx.globalAlpha = stemProgress * 0.3;
+                ctx.beginPath();
+                ctx.moveTo(tulip.centerX - 1, tulip.baseY - 50);
+                ctx.quadraticCurveTo(tulip.centerX - 0.5, tulip.baseY - tulip.stemHeight * stemProgress * 0.5, tulip.centerX - 1, stemEndY - 20);
+                ctx.stroke();
+                ctx.globalAlpha = 1;
+            });
+        }
+
+        function drawLeaves(progress) {
+            const leafProgress = Math.min(Math.max(0, progress - 0.12) / 0.3, 1);
+            if (leafProgress <= 0) return;
+
+            const stemProgress = Math.min(Math.max(0, progress - 0.05) / 0.3, 1);
+
+            const leafGradient = ctx.createLinearGradient(0, 0, 50, 0);
+            leafGradient.addColorStop(0, '#8BC34A');
+            leafGradient.addColorStop(0.5, '#689F38');
+            leafGradient.addColorStop(1, '#33691E');
+
+            tulips.forEach(tulip => {
+                // Leaves sprout from the MIDDLE of the stem
+                const stemHeightReached = tulip.stemHeight * stemProgress;
+                const leafBaseY = tulip.baseY - (stemHeightReached * 0.5); // Middle of stem
+                const leafHeightReached = stemHeightReached * 0.5; // Leaves grow from middle outward
+
+                // Left leaf - rooted on stem middle, grows outward and upward
+                ctx.save();
+                ctx.translate(tulip.centerX, leafBaseY);
+                ctx.globalAlpha = leafProgress * 0.85;
+
+                ctx.fillStyle = leafGradient;
+                ctx.beginPath();
+                ctx.moveTo(0, 0); // Start at stem center
+                ctx.bezierCurveTo(-18 * leafProgress, -25 * leafProgress, -32 * leafProgress, -leafHeightReached * 0.5, -24 * leafProgress, -leafHeightReached * leafProgress);
+                ctx.bezierCurveTo(-14 * leafProgress, -leafHeightReached * 0.6 * leafProgress, 0, -leafHeightReached * 0.2 * leafProgress, 0, 0);
+                ctx.fill();
+
+                // Leaf vein
+                ctx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.quadraticCurveTo(-16 * leafProgress, -leafHeightReached * 0.4, -16 * leafProgress, -leafHeightReached * leafProgress);
+                ctx.stroke();
+
+                ctx.restore();
+
+                // Right leaf - rooted on stem middle, grows outward and upward
+                ctx.save();
+                ctx.translate(tulip.centerX, leafBaseY);
+                ctx.globalAlpha = leafProgress * 0.85;
+
+                ctx.fillStyle = leafGradient;
+                ctx.beginPath();
+                ctx.moveTo(0, 0); // Start at stem center
+                ctx.bezierCurveTo(18 * leafProgress, -25 * leafProgress, 32 * leafProgress, -leafHeightReached * 0.5, 24 * leafProgress, -leafHeightReached * leafProgress);
+                ctx.bezierCurveTo(14 * leafProgress, -leafHeightReached * 0.6 * leafProgress, 0, -leafHeightReached * 0.2 * leafProgress, 0, 0);
+                ctx.fill();
+
+                // Leaf vein
+                ctx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.quadraticCurveTo(16 * leafProgress, -leafHeightReached * 0.4, 16 * leafProgress, -leafHeightReached * leafProgress);
+                ctx.stroke();
+
+                ctx.restore();
+            });
+        }
+
+
+
+        function draw(progress) {
+            // Clear canvas
+            ctx.fillStyle = 'rgba(15, 15, 35, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw text at top of canvas
+            ctx.fillStyle = '#FFD966';
+            ctx.font = 'bold 36px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 10;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 2;
+            ctx.fillText('Flowers for the Best Girl Ever 😘', canvas.width / 2, 30);
+            ctx.shadowColor = 'transparent';
+
+            // Draw tulips
+            drawIndividualStems(progress);
+            drawLeaves(progress);
+            
+            // Draw petals
+            allPetals.forEach(petal => petal.draw(ctx, progress));
+        }
+
+        function animate(currentTime) {
+            if (!startTime) startTime = currentTime;
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / animationDuration, 1);
+
+            draw(progress);
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                isAnimating = false;
+            }
+        }
+
+        function startAnimation() {
+            if (isAnimating) return;
+            isAnimating = true;
+            startTime = null;
+            requestAnimationFrame(animate);
+        }
+
+        // Auto-start on load
+        window.addEventListener('load', () => {
+            setTimeout(startAnimation, 300);
+        });
+    </script>
+</body>
+</html>

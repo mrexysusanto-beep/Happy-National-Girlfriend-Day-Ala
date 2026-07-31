@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Message for Ala</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffd6e8 0%, #ffb3d9 50%, #ffc0d9 100%);
+            font-family: 'Georgia', serif;
+            padding: 20px;
+        }
+
+        .letter-container {
+            background: #f5f5f5;
+            padding: 60px;
+            border-radius: 12px;
+            border: 3px solid #d4a5c8;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .letter-container h1 {
+            color: #a85a7a;
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: normal;
+            letter-spacing: 2px;
+        }
+
+        .letter-container p {
+            color: #666;
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .button-container {
+            margin-top: 40px;
+        }
+
+        .view-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #f5a9a9 0%, #f08080 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            border: 2px solid #d4898b;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .view-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .decoration {
+            font-size: 40px;
+            margin: 20px 0;
+        }
+
+        .bg-image {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            object-fit: cover;
+            opacity: 0.8;  /* More visible than before */
+            pointer-events: none;
+            border-radius: 8px;
+            z-index: 0;
+        }
+
+        .bg-video {
+            position: absolute;
+            width: 200px;
+            height: 900px;
+            object-fit: cover;
+            opacity: 0.8;
+            pointer-events: none;
+            border-radius: 8px;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="letter-container">
+        <h1> To the Best Girlfriend Ever ❤️</h1>
+        
+
+        <p>
+            Hai hai, were almost there Ala. Thank you for thugging out the lonely times for me! I want you to know that you have been the best part of my life.
+        </p>
+
+        <p>
+            I am so grateful that you took a chance on me. Without you my life would be so much different. 
+            If you ever feel down, Read this message to remember that I will be your biggest supporter ☺️
+        </p>
+
+        <p>
+            Thank you for being my girlfriend and making me the best version of myself. I love you so muchhhh MWAHHHH 😘
+        </p>
+
+        <!-- Background images -->
+    <img src="Close  Up.jpg" class="bg-image" style="left: 80px; top: 80px;">
+    <img src="Sleepy ALA.jpg" class="bg-image" style="left: 80px; bottom: 80px;">
+
+    <!-- Middle right background video -->
+    <video class="bg-video" style="right: 200px; top: 50%; transform: translateY(-50%);" autoplay muted loop>
+        <source src="Photobooth.mp4" type="video/mp4">
+    </video>
+
+        <div class="decoration">💕</div>
+
+        <div class="button-container">
+            <a href="tulip.html" class="view-button">Click This For a Surprise!!!</a>
+        </div>
+    </div>
+</body>
+</html>
