@@ -187,6 +187,26 @@
                 opacity: 1;
             }
         }
+
+         .left-image {
+            position: absolute;
+            left: 250px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 150px;
+            height: 150px;
+            border-radius: 8px;
+        }
+
+        .right-image {
+            position: absolute;
+            right: 250px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 150px;
+            height: 150px;
+            border-radius: 8px;
+        }
  
         @media (max-width: 480px) {
             .heart-emoji {
@@ -215,10 +235,21 @@
             .subgreeting {
                 font-size: 20px;
             }
+
+            .left-image {
+                display: none;
+            }
+
+            .right-image{
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
+
+    <img src="nyota_removed.png" class="left-image" style="width: 500px; height: 400px;">
+    <img src="hirono.png" class="right-image" style="width: 400px; height: 400px;">
 
 <!-- Floating heart decorations -->
     <div class="heart-bg" style="top: 5%; left: 8%; animation-delay: 0s;">
